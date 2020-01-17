@@ -1,0 +1,84 @@
+<div class="bg">
+  <div class="snow"></div>
+  <div class="container">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary red-overwrite">
+      <a href="/search" class="navbar-brand d-flex align-items-center">
+        <i class="fa fa-snowflake-o fa-lg text-primary mr-2"></i
+        ><strong> Santa's Helpers</strong></a
+      >
+      <button class="navbar-toggler" type="button" (click)="toggleNavbar()">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <div
+        class="collapse navbar-collapse"
+        id="navbarColor01"
+        [ngClass]="{ show: navbarOpen }"
+      >
+        <ul class="navbar-nav mr-auto">
+          <li class="nav-item active">
+            <a class="nav-link" href="#"
+              >Home<span class="sr-only">(current)</span></a
+            >
+          </li>
+
+          <li class="nav-item">
+            <a class="nav-link" routerLink="/contact">Contact</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" routerLink="/about">About</a>
+          </li>
+        </ul>
+      </div>
+    </nav>
+
+    <div class="component-container" *ngIf="!charityResults[0]">
+      <img
+        src="https://imageshack.com/a/img922/9852/nLNOJK.gif"
+        class="loading"
+      />
+    </div>
+    <div class="jumbotron jumbotron-fluid">
+      <div class="container">
+        <google-map
+          height="400px"
+          width="100%"
+          [zoom]="zoom"
+          [center]="center"
+          [options]="options"
+          (mapClick)="click($event)"
+        >
+          <map-marker
+            #markerElem
+            *ngFor="let marker of markers"
+            [position]="marker.position"
+            [label]="marker.label"
+            [title]="marker.title"
+            [options]="marker.options"
+            (mapClick)="openInfo(markerElem, marker.info)"
+          >
+          </map-marker>
+          <!-- <div class="info-container" *ngIf="charity"> -->
+          <map-info-window *ngIf="infoContent">
+            <p class="info-name">{{ infoContent.charityName }}</p>
+            <p class="info">
+              {{ infoContent.mailingAddress.streetAddress1 }}/
+              {{ infoContent.mailingAddress.city }}/
+              {{ infoContent.mailingAddress.stateOrProvince }}/
+              {{ infoContent.mailingAddress.postalCode }}/
+            </p>
+          </map-info-window>
+        </google-map>
+
+        <div class="component-container" *ngIf="charityResults">
+          <div class="charity-results-container">
+            <app-charity-item
+              *ngFor="let charity of charityResults"
+              [charity]="charity"
+            ></app-charity-item>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
